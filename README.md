@@ -4,7 +4,10 @@ For each identified open port, the tool provides a brief description of the serv
 **Installation **
 
 •	Download the folder or sudo git clone https://github.com/GIRISH05/Network-Scanner.git
+
 •	cd Network-Scanner
+
 •	chmod +x PortScanner
+
 •	./PortScanner <target.ip>
 
