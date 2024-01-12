@@ -1,1 +1,66 @@
+#!/bin/bash
 
+if [ $# -eq 0 ]; then
+    echo "Usage: $0 <target_ip>"
+    exit 1
+fi
+
+target_ip=$1
+
+echo "Scanning all ports on $target_ip..."
+
+for port in {1..65535}; do
+    # Use netcat to attempt a connection to the target IP and port
+    nc -z -w 1 $target_ip $port
+
+    # Check the exit status of netcat
+    if [ $? -eq 0 ]; then
+        # Identify common services based on well-known ports
+        case $port in
+            20)
+                service="FTP - Data"
+                description="File Transfer Protocol (data)"
+                ;;
+            21)
+                service="FTP - Control"
+                description="File Transfer Protocol (control)"
+                ;;
+            22)
+                service="SSH"
+                description="Secure Shell"
+                ;;
+            23)
+                service="Telnet"
+                description="Telnet remote login service"
+                ;;
+            25)
+                service="SMTP"
+                description="Simple Mail Transfer Protocol"
+                ;;
+            80|8080)
+                service="HTTP"
+                description="Hypertext Transfer Protocol"
+                ;;
+            443)
+                service="HTTPS"
+                description="Hypertext Transfer Protocol Secure"
+                ;;
+            3306)
+                service="MySQL"
+                description="MySQL Database Server"
+                ;;
+            5432)
+                service="PostgreSQL"
+                description="PostgreSQL Database Server"
+                ;;
+            *)
+                service="Unknown"
+                description="Unknown service"
+                ;;
+        esac
+
+        echo "Port $port is open - Service: $service - Description: $description"
+    fi
+done
+
+echo "Scan complete"
